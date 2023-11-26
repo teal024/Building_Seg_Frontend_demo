@@ -1,26 +1,18 @@
 <template>
-    <el-container class="result-container">
-      
-      <el-main class="result-gallery" v-loading="isload">
-        <!-- 行 -->
-        <el-row v-for="(row, index) in imageRows" :key="index" class="resultrow" :gutter="20">
-          <!-- 列 -->
-          <el-col v-for="(result, i) in row" :key="i" :span="6" class="resultcol" style="max-width:none;">
-              <el-card class="result">
-                <img :src="result" class="image" alt="图片加载失败" />
-                <el-button type="primary" :icon="ZoomIn" @click="dialogVisible=true" circle/>
-                <el-button type="success" :icon="Download" @click="savePicture(result.url)" circle />
-              </el-card>
-              <el-dialog v-model="dialogVisible">
-                <div class="picture-container">
-                    <img w-full :src="result.url" alt="图片预览" class="picture"/>
-                </div>
-            </el-dialog>
-          </el-col>
-        </el-row>
-      </el-main>
-    </el-container>
-  </template>
+  <el-container class="result-container">
+    <el-main class="result-gallery" v-loading="isload">
+      <!-- 行 -->
+      <el-row v-for="(image, index) in images" :key="index" class="resultrow" :gutter="20">
+        <el-card class="result">
+          <img :src="image" class="image" alt="图片加载失败" />
+          <div class="label">{{ labels[index] }}</div>
+        </el-card>
+      </el-row>
+    </el-main>
+  </el-container>
+</template>
+
+
   
   <script setup>
   import { computed } from 'vue'
@@ -36,22 +28,10 @@
     });
   
   const isload = ref(false);
-  const dialogVisible = ref(false) //缩略图是否可见
-  
-  const rowSize = 4
 
-  const imageRows = computed(() => {
-    const rows = []  //二维数组，rows[i]存储第i行的店铺卡牌（4个）
-    const rowCount = props.data.total / rowSize; //行数
-    for (let i = 0; i < rowCount; i++) {
-      rows.push(props.data.pictures.slice(i * rowSize, (i + 1) * rowSize))
-    }
-    return rows;
-  })
+  const images =  props.data.pictures;
+  const labels = props.data.labels;
 
-  const savePicture = (url) =>{
-    console.log(url);
-  }
   </script>
   
   
