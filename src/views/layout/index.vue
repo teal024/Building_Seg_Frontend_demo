@@ -8,6 +8,8 @@
     <!-- 右侧功能区域begin -->
     <div class = "func-zone">
         <div>功能模块</div>
+        <div v-if="userStore.userInfo.role=='Manager'">您好，管理员，您具有所有使用权限</div>
+        <div v-if="userStore.userInfo.role=='User'">您好，普通用户，您具有有限使用权限</div>
         <dashboard v-if="choice == 'dashboard'"/>
         <segmentation v-if="choice == 'segmentation'"/>
         <explosion_identify v-if="choice == 'explosion_identify'"/>
@@ -23,9 +25,11 @@ import segmentation from '@/views/layout/segmentation/index.vue'
 import explosion_identify from '@/views/layout/explosion_identify/index.vue'
 import vibration from '@/views/layout/vibration/index.vue'
 import { useRoute } from 'vue-router'
+import { useUserStore } from '@/store/user';
 
 const route = useRoute();
 const choice = ref();//根据路由传值对应功能区的显示内容
+const userStore = useUserStore();
 
 // 监听路由变化并执行不同逻辑
 onMounted(() => {
