@@ -1,7 +1,5 @@
-# Vue 3 + Vite
-
-图像分割小前端
-
+# 图像分割小前端
+## To Run
 npm install
 
 npm run dev
