@@ -3,27 +3,70 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 
+// 登录功能
+import request from '@/utils/Request';
 
-export const useUserStore = defineStore('user',() => {
-    const userInfo = ref({})
+export const loginAPI = ({ email, password }) => {
+    return request.post('/login', {
+        email,
+        password
+    });
+}
+
+// 注册功能
+export const registerAPI = ({ username, password, phoneNumber, city }) => {
+    return request.post('/register', {
+        username,
+        password,
+        phoneNumber,
+        city
+    });
+}
+
+
+import { useRouter } from 'vue-router';
+
+export const useUserStore = defineStore('user', () => {
+    const router = useRouter();  // 获取 Vue Router 实例
+    const userInfo = ref({});
+
     // 获取用户信息并存储
-    const getUserInfo = async({username,password}) => {
-        const token = '';
-        const res = await loginAPI({token, username,password})
-        userInfo.value = res.data
-        localStorage.setItem('jwt_token', token);
-    }
+    const login = async (email, password) => {
+        try {
+            const response = await loginAPI({ email, password });
+            console.log(response)
+            if (response.status===200) {
+                // 如果登录成功，存储用户信息
+                userInfo.value = response.data;
+
+                // 跳转到指定页面
+                router.push({
+                    name: 'layout',
+                    params: {
+                        choice: 'dashboard'
+                    }
+                });
+            } else {
+                // 如果登录失败，处理错误信息
+                console.error(response.message);
+                // 这里你可以选择展示错误信息给用户，例如使用弹窗、Toast 等
+            }
+        } catch (error) {
+            console.error(error);
+            // 处理其他错误，例如网络请求失败等
+        }
+    };
 
     // 退出时清除用户信息
-    const clearUserInfo = ()=> {
-        userInfo.value={}
-    }
+    const clearUserInfo = () => {
+        userInfo.value = {};
+    };
 
     return {
         userInfo,
-        getUserInfo,
+        login,
         clearUserInfo
-    }
-},{
-    persist:true,
-})
+    };
+}, {
+    persist: true,
+});
