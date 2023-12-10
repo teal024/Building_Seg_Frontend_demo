@@ -21,8 +21,18 @@
         <form @submit.prevent="register">
           <label for="email">邮箱:</label>
           <input v-model="registerForm.email" type="text" required />
-          <label for="password">密码:</label>
+          <div class="verification-code">
+            <label for="verificationCode">验证码:</label>
+            <input v-model="registerForm.verificationCode" type="text" required />
+            <button @click.prevent="sendVerificationCode" style="color: white;">发送验证码</button>
+          </div>
+
+          <label for="password">输入密码:</label>
           <input v-model="registerForm.password" type="password" required />
+
+          <label for="confirmPassword">确认密码:</label>
+          <input v-model="registerForm.confirmPassword" type="password" required />
+
           <button type="submit">注册</button>
         </form>
         <p @click="toggleForm">已有账户？点击登录</p>
@@ -63,6 +73,10 @@ const login = () => {
   // 实现登录逻辑
   userStore.login(loginForm.email, loginForm.password);
   
+};
+
+const sendVerificationCode = () => {
+  userStore.sendVerificationCode(registerForm.email);
 };
 
 const register = () => {
