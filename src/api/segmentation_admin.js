@@ -2,14 +2,14 @@ import Request from "@/utils/Request.js";  // 在每个 api 文件里都要引�
 import Message from "@/utils/Message.js"  // 在每个 api 文件里都要引入这两个文件
 import router from "@/router/index.js"
 
-export function sendRequest(Method, Url, FormData) {  
+export function sendRequest(Method, Url, formData) {  
     return Request({  // 发送请求
         method: Method,
         headers: {
             'Content-Type': 'application/form-data', // 设置请求头
         },
         url: Url,  // 与后端接口对应！！！ 
-        data: FormData, // Image list
+        data: formData, 
     }).then(function (response) {  // then 表示成功接收到响应后的操作
         if (response.status === 200) {
             Message.success("操作成功");
@@ -21,7 +21,7 @@ export function sendRequest(Method, Url, FormData) {
     }).catch(function (error) {  // catch 表示接收到错误响应后的操作
         console.log("Request URL: ", Url);
         console.log("Request Method: ", Method);
-        console.log("Request Data: ", FormData);
+        console.log("Request Data: ", formData);
         console.error("Error: ", error);
     });
 }
@@ -32,8 +32,8 @@ export function UploadBatchImg(img) {
 }
 
 // API 2：管理员发送带ID的请求，后端处理相应图片并返回是否成功，处理结果共有多少张，并返回一个标签列表
-export function SegSingleImg(ImageList) {
-    return sendRequest('POST', '/backend/seg_single_image_from_to_db/', ImageList)
+export function SegSingleImg(img) {
+    return sendRequest('POST', '/backend/seg_single_image_from_to_db/', img)
 }
 
 // API 3：管理员发送带ID的请求，后端从数据库中查询到对应图片并返回分割和分类结果
