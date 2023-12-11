@@ -7,9 +7,9 @@
         <ImgUploader ref="ImgUploadRef" @uploadPicture ="upload" @onCancel="cancel"/>
     </div>
     <div class="centered-element" v-if="showProgress">
-        <el-progress type="circle" :text-inside="true" :stroke-width="18" :percentage="per"></el-progress>
+        <el-progress type="circle" :text-inside="false" :stroke-width="18" :percentage="per"></el-progress>
     </div>
-    <div class="result-img-table" v-if="ImgResult.length">
+    <div class="result-img-table" v-if="!showProgress">
         <ResultImgTable :tableData="ImgResult"/>
     </div>
     
@@ -64,64 +64,67 @@ const upload = (val) => {
         });
 }
 
-const after_upload = (result) => {
-    ImgResult.value = result.data;
-    const ImgNum = result.data['images'].length;
-    // for (let i = 0; i < ImgNum; i++) {
-        let formData = new FormData();
+// const after_upload = (result) => {
+//     // ImgResult.value = result.data;
+//     const ImgNum = result.data['images'].length;
+//     for (let i = 0; i < ImgNum; i++) {
+//         let formData = new FormData();
         
-        formData.append('image_id', result.data['images'][0]);
+//         formData.append('image_id', result.data['images'][0]);
         
-        Request({  // 发送请求
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/form-data', // 设置请求头
-            },
-            url: '/backend/seg_single_image_from_to_db/',  // 与后端接口对应！！！ 
-            data: formData, 
-        }).then(function (response) {  // then 表示成功接收到响应后的操作
-            if (response.status === 200) {
-                Message.success("操作成功");
-                return response;  //  // 正确响应，返回数据
-            } else {
-                Message.error("操作失败");
-            }
-        }).catch(function (error) {  // catch 表示接收到错误响应后的操作
-            // console.log("Request URL: ", Url);
-            // console.log("Request Method: ", Method);
-            console.log("Request Data: ", FormData);
-            console.error("Error: ", error);
-        });
+//         Request({  // 发送请求
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/form-data', // 设置请求头
+//             },
+//             url: '/backend/seg_single_image_from_to_db/',  // 与后端接口对应！！！ 
+//             data: formData, 
+//         }).then(function (response) {  // then 表示成功接收到响应后的操作
+//             if (response.status === 200) {
+//                 Message.success("操作成功");
+//                 return response;  //  // 正确响应，返回数据
+//             } else {
+//                 Message.error("操作失败");
+//             }
+//         }).catch(function (error) {  // catch 表示接收到错误响应后的操作
+//             // console.log("Request URL: ", Url);
+//             // console.log("Request Method: ", Method);
+//             console.log("Request Data: ", FormData);
+//             console.error("Error: ", error);
+//         });
 
-        // per.value = (i + 1) * 100.0 / ImgNum;
-        // console.log("per", per);
-    }
+//         per.value = (i + 1) * 100.0 / ImgNum;
+//         console.log("per", per);
+//     }
 // }
 
-// const after_upload = async (result) => {
-//     const ImgNum = result.data['images'].length;
+const after_upload = async (result) => {
+    const ImgNum = result.data['images'].length;
 
-//     // Define an async function to process a single image
-//     const processImage = async (index) => {
-//         let formData = new FormData();
-//         formData.append('image_id', result.data['images'][index]);
+    // Define an async function to process a single image
+    const processImage = async (index) => {
+        let formData = new FormData();
+        formData.append('image_id', result.data['images'][index]);
 
-//         try {
-//             const segmentationResult = await SegSingleImg(formData);
-//             console.log("Seg Done", segmentationResult);
-//         } catch (error) {
-//             console.error("Error in SegSingleImg:", error);
-//         }
+        try {
+            const segmentationResult = await SegSingleImg(formData);
+            console.log("Seg Done", segmentationResult);
+        } catch (error) {
+            console.error("Error in SegSingleImg:", error);
+        }
 
-//         per.value = (index + 1) * 100.0 / ImgNum;
-//         console.log("per", per);
-//     };
+        per.value = (index + 1) * 100.0 / ImgNum;
+        if (index == ImgNum - 1) {
+            showProgress = false;
+        }
+        console.log("per", per);
+    };
 
-//     // Use a for...of loop to avoid the closure issue
-//     for (let i = 0; i < ImgNum; i++) {
-//         await processImage(i);
-//     }
-// };
+    // Use a for...of loop to avoid the closure issue
+    for (let i = 0; i < ImgNum; i++) {
+        await processImage(i);
+    }
+};
 
 const cancel = () => {
     ImgResult.value = [];
@@ -145,7 +148,9 @@ const cancel = () => {
     }
 
     .centered-element {
-        align-self: center; /* 使用align-self属性使元素在交叉轴上居中 */
-        /* 可以添加其他样式，使元素看起来符合你的设计需求 */
+    }
+
+    .result-img-table {
+        margin-top: 2%;
     }
 </style>
