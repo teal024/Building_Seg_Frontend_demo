@@ -9,7 +9,7 @@ export function UploadImg(FormData) {  // 在 src/views/login/index.vue 里调�
         headers: {
             'Content-Type': 'application/form-data', // 设置请求头
         },
-        url: '/backend/saveimage/',  // 与后端接口对应！！！
+        url: '/backend/seg_single_image/',  // 与后端接口对应！！！
         data: FormData, // 使用FormData作为请求体
     }).then(function (response) {  // then 表示成功接收到响应后的操作
         if (response.status === 200) {

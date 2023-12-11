@@ -10,6 +10,7 @@
         <div>功能模块</div>
         <dashboard v-if="choice == 'dashboard'"/>
         <segmentation v-if="choice == 'segmentation'"/>
+        <segmentation_admin v-if="choice == 'segmentation_admin'"/>
         <explosion_identify v-if="choice == 'explosion_identify'"/>
         <vibration v-if="choice == 'vibration'"/>
     </div>
@@ -20,6 +21,7 @@ import { ref, reactive, onMounted, onUpdated, computed} from 'vue'
 import SideBar from '@/components/SideBar.vue'
 import dashboard from '@/views/layout/dashboard/index.vue'
 import segmentation from '@/views/layout/segmentation/index.vue'
+import segmentation_admin from '@/views/layout/segmentation_admin/index.vue'
 import explosion_identify from '@/views/layout/explosion_identify/index.vue'
 import vibration from '@/views/layout/vibration/index.vue'
 import { useRoute } from 'vue-router'
@@ -41,6 +43,8 @@ const updateLogic = () => {
     choice.value = 'dashboard'
   } else if (route.params.choice === 'segmentation') {
     choice.value = 'segmentation'
+  } else if (route.params.choice === 'segmentation_admin') {
+    choice.value = 'segmentation_admin'
   }
   else if (route.params.choice === 'explosion_identify') {
     choice.value = 'explosion_identify'

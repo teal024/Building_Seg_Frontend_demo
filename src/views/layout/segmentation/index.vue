@@ -18,7 +18,7 @@ import axios from 'axios'
 import router from "@/router/index.js"
 import Message from "@/utils/Message.js"
 import ImgUploader from '@/components/ImgUploader.vue'
-import ImgList from '@/components/ImgList.vue'
+import ImgList from '@/components/ResultContainer.vue'
 import { UploadImg } from '@/api/segmentation.js'
 
 // const fileList = ref();

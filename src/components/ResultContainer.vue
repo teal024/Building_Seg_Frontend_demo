@@ -73,12 +73,12 @@
   <style scoped>
   /* Add your styling here */
   .result-gallery {
-    margin-left: 4%; /* Adjust the left margin to shift the result to the right */
+    margin-left: 12%; /* Adjust the left margin to shift the result to the right */
   }
   
   .label-group {
     margin-bottom: 10px;
-    margin-right: 70px;
+    margin-right: 14%;
   }
   
   .resultrow {
@@ -88,6 +88,7 @@
   .image-card {
     margin-bottom: 20px; /* Add spacing between images */
     margin-right: 20px; /* Add a right offset */
+    max-width: 16%;
   }
   
   .image {
