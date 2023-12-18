@@ -12,7 +12,7 @@
     <!-- <div class="result-container" v-if="ImgResult">
         <ImgList :data="ImgResult"/>
     </div> -->
-    <div class="carousel-container">
+    <div class="carousel-container" v-if="ImgResult.length > 0">
         <el-carousel class="carousel" :interval="0" arrow="always" indicator-position="outside" style="flex: 1;">
             <el-carousel-item v-for="(item,index) in ImgResult" :key="index">
                 <ImgList :data="item"/>
@@ -30,24 +30,20 @@ import Request from "@/utils/Request.js"
 import Message from "@/utils/Message.js"
 import ImgList from "@/components/ResultContainer.vue"
 import ImgUploader from '@/components/ImgUploader_batch.vue'
-import ResultImgTable from '@/components/ResultImgTable.vue'
-import {UploadBatchImg, SegSingleImg, GetSegResult, GetImgByDate } from '@/api/segmentation_admin.js'
+import { UploadBatchImg, SegSingleImg, GetSegResult, GetImgByDate } from '@/api/segmentation_admin.js'
 import { timePanelSharedProps } from 'element-plus/es/components/time-picker/src/props/shared'
 
-// const fileList = ref();
-var ImgUploadRef = ref(null); //上传的图片
-// const FileList = ref(null);
-var ImgResult = ref([]); //分割后获得的图片
+var ImgUploadRef = ref(null); // 上传的图片
+var ImgResult = ref([]); // 分割后获得的图片
 var fileList = ref(null);
 const thumbnailUrl = ref(null);
-// 这里是一个响应式变量
 
 var per = ref(0); // 进度条当前百分比
-var showProgress = ref(false); // 展示进度条
-var processingTime = 0; // 当前批次图像处理时间
+var showProgress = ref(false); // 控制是否展示进度条
 
+// 跳转仪表盘页面
 const GoToDash = () => {
-    //跳转仪表盘页面
+    
     router.push({ 
         name: 'layout', 
         params:{ 
@@ -56,6 +52,7 @@ const GoToDash = () => {
     })
 }
 
+// 批量上传图片
 const upload = (val) => {
     fileList = val.fileList;
     console.log("num of uploaded images : ", fileList.length);
@@ -64,7 +61,7 @@ const upload = (val) => {
     for (let i = 0; i < fileList.length; i++) {
         formData.append('image', fileList[i].raw);
     }
-    // console.log("formData : ", formData);
+    
     UploadBatchImg(formData)
         .then(function (result) {
             console.log("upload Done", result);
@@ -75,16 +72,7 @@ const upload = (val) => {
         });
 }
 
-const beforeUpload = (file) => {
-  // 阻止自动上传
-  return false;
-};
-
-const handleImageUpload = (file) => {
-  // 将图片的 URL 保存到变量中
-  imageUrl.value = URL.createObjectURL(file.raw);
-};
-
+// 改变图片尺寸，用于生成缩略图
 function resizeImage(imageSrc, width, height) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -101,31 +89,16 @@ function resizeImage(imageSrc, width, height) {
   });
 };
 
+// 完成上传后，对图片进行分割和分类并展示结果
 const after_upload = async (result) => {
+    // 展示进度条
     showProgress.value = true;
-    processingTime = result.data['batch_time'];
-
-    const timestamp = new Date(processingTime);
-
-    const options = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZone: 'Asia/Shanghai', // 指定时区
-    };
-
-    processingTime = timestamp.toLocaleString('zh-CN', options);
 
     const ImgNum = result.data['images'].length;
-
-    // Define an async function to process a single image
+    // 处理图片的异步函数
     const processImage = async (index) => {
         let formData = new FormData();
         formData.append('image_id', result.data['images'][index]);
-
         try {
             var segmentationResponse = await SegSingleImg(formData);
             const labels = segmentationResponse.data['label_list'];
@@ -135,13 +108,13 @@ const after_upload = async (result) => {
             resizeImage(fileList[index].url, 200, 200)
                 .then(resizedUrl => {
                     thumbnailUrl.value = resizedUrl;
-                    ImgResult.value.push({
-                        processingTime: processingTime, // 分割时间
-                        thumbnail: thumbnailUrl.value, // 被分割图片的路径
-                        // fileList[index].url,
-                        labelList: [...new Set(labels)], // 分割出来各部分的标签
-                        // pictures: segmentationResult.data['segmented_image_paths'], // 分割出来各部分的图片路径
-                        pictures: labels.map((label, index) => ({
+                    ImgResult.value.push({ 
+                        // 被分割图片的路径
+                        thumbnail: thumbnailUrl.value, 
+                        // 分割得到的标签列表
+                        labelList: [...new Set(labels)],
+                        // 分割得到的各个图片局部及其标签
+                        pictures: labels.map((label, index) => ({ 
                             label: label,
                             image: segmentationResult.data['segmented_image_paths'][index]
                         }))
@@ -155,23 +128,21 @@ const after_upload = async (result) => {
             console.error("Error in SegSingleImg:", error);
         }
 
+        // 更新进度条
         per.value = parseFloat(((index + 1) * 100.0 / ImgNum).toFixed(1));
         if (index == ImgNum - 1) {
             showProgress.value = false;
         }
-        console.log("per", per);
+        // console.log("per", per);
     };
 
-    // console.log("ref ", ImgUploadRef.value);
-    // Use a for...of loop to avoid the closure issue
+    // 逐张处理上传的图片
     for (let i = 0; i < ImgNum; i++) {
-        // console.log("ImgRes: ", ImgResult);
         await processImage(i);
-        // console.log("ImgRes: ", ImgResult);
     }
-    // console.log("table", ImgResult);
 };
 
+// 取消上传
 const cancel = () => {
     ImgResult.value = [];
 }

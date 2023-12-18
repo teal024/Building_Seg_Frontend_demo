@@ -8,6 +8,7 @@
     <!-- 右侧功能区域begin -->
     <div class = "func-zone">
         <div>功能模块</div>
+        <authorize_admin v-if="choice == 'authorize_admin'"/>
         <dashboard v-if="choice == 'dashboard'"/>
         <segmentation v-if="choice == 'segmentation'"/>
         <explosion_identify v-if="choice == 'explosion_identify'"/>
@@ -18,6 +19,7 @@
 <script setup>
 import { ref, reactive, onMounted, onUpdated, computed} from 'vue'
 import SideBar from '@/components/SideBar.vue'
+import authorize_admin from '@/views/layout/authorize_admin/index.vue'
 import dashboard from '@/views/layout/dashboard/index.vue'
 import segmentation from '@/views/layout/segmentation/index.vue'
 import explosion_identify from '@/views/layout/explosion_identify/index.vue'

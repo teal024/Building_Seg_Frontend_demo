@@ -9,7 +9,6 @@
                 </template>
                 <el-menu-item index="dashboard">仪表盘</el-menu-item>
                 <el-menu-item index="segmentation">图像分割处理</el-menu-item>
-                <el-menu-item index="segmentation_admin">图像分割处理（管理员）</el-menu-item>
                 <el-menu-item index="explosion_identify">玻璃内爆识别</el-menu-item>
                 <el-menu-item index="vibration">风振数据显示</el-menu-item>
                 <el-menu-item index="3Dmodel">3D模型</el-menu-item>
