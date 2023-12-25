@@ -1,28 +1,11 @@
 <!-- 侧边栏页面 -->
 <template>
     <el-aside width=100%>
-        <h2>LOGO</h2>
-        <el-menu :default-active="defaultActive" router class = "menu">
-            <el-sub-menu index="dashboard">
-                <template #title>
-                    <span style="color:rgb(204, 204, 204);">功能</span>
-                </template>
-                <el-menu-item index="dashboard">仪表盘</el-menu-item>
-                <el-menu-item index="segmentation">图像分割处理</el-menu-item>
-                <el-menu-item index="explosion_identify">玻璃内爆识别</el-menu-item>
-                <el-menu-item index="vibration">风振数据显示</el-menu-item>
-                <el-menu-item index="3Dmodel">3D模型</el-menu-item>
-            </el-sub-menu>
-            <el-sub-menu index="database">
-                <template #title>
-                    <span style="color:rgb(204, 204, 204);">数据库</span>
-                </template>
-                <el-menu-item index="pics">保存的图片</el-menu-item>
-                <el-menu-item index="vibration_data">风振数据</el-menu-item>
-            </el-sub-menu>
-            <el-menu-item index="personal" style="color:rgb(226, 226, 226);">
-                个人中心
-            </el-menu-item>
+        <h2>幕墙分割识别系统</h2>
+        <el-menu :default-active="defaultActive" router class = "menu" index="segmentation" style="color:rgb(204, 204, 204);">
+            <el-menu-item index="admin_authorize">管理员授权</el-menu-item>
+            <el-menu-item index="segmentation">图像分割处理</el-menu-item>
+            <el-menu-item index="seg_history">图像分割记录</el-menu-item>
         </el-menu>
     </el-aside>
 </template>
@@ -36,7 +19,7 @@ const showManagement = ref(true)
 const handleSelectMenu = (choice) => {
     router.push({ name: 'layout', params:{ choice:choice } })
 }
-const defaultActive = ref('dashboard')
+const defaultActive = ref('segmentation')
 
 </script>
 

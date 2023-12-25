@@ -1,57 +1,48 @@
 <!-- 排版页面 -->
 <template>
-  <!-- 侧边栏区域begin -->
-  <div class = "menu">
-      <SideBar />
-  </div>
-  <!-- 侧边栏区域end -->
-  <!-- 右侧功能区域begin -->
-  <div class = "func-zone">
-      <div>功能模块</div>
-      <div v-if="userStore.userInfo.authority=='admin'">您好，管理员，您具有所有使用权限</div>
-      <div v-if="userStore.userInfo.authority=='visitor'">您好，普通用户，您具有有限使用权限</div>
-      <dashboard v-if="choice == 'dashboard'"/>
-      <segmentation v-if="choice == 'segmentation'"/>
-      <explosion_identify v-if="choice == 'explosion_identify'"/>
-      <vibration v-if="choice == 'vibration'"/>
-  </div>
+    <!-- 侧边栏区域begin -->
+    <div class = "menu">
+        <SideBar />
+    </div>
+    <!-- 侧边栏区域end -->
+    <!-- 右侧功能区域begin -->
+    <div class = "func-zone">
+        <admin_authorize v-if="choice == 'admin_authorize'"/>
+        <segmentation v-if="choice == 'segmentation'"/>
+        <seg_history v-if="choice == 'seg_history'"/>
+    </div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, onUpdated, computed} from 'vue'
 import SideBar from '@/components/SideBar.vue'
-import dashboard from '@/views/layout/dashboard/index.vue'
+import admin_authorize from '@/views/layout/admin_authorize/index.vue'
 import segmentation from '@/views/layout/segmentation/index.vue'
-import explosion_identify from '@/views/layout/explosion_identify/index.vue'
-import vibration from '@/views/layout/vibration/index.vue'
+import seg_history from '@/views/layout/seg_history/index.vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/store/user';
 
 const route = useRoute();
-const choice = ref();//根据路由传值对应功能区的显示内容
+const choice = ref('segmentation');//根据路由传值对应功能区的显示内容
 const userStore = useUserStore();
 
 // 监听路由变化并执行不同逻辑
 onMounted(() => {
-updateLogic();
+  updateLogic();
 });
 onUpdated(() => {
-updateLogic();
+  updateLogic();
 });
 
 // 执行不同逻辑的函数
 const updateLogic = () => {
-if (route.params.choice === 'dashboard') {
-  choice.value = 'dashboard'
-} else if (route.params.choice === 'segmentation') {
-  choice.value = 'segmentation'
-}
-else if (route.params.choice === 'explosion_identify') {
-  choice.value = 'explosion_identify'
-}
-else if (route.params.choice === 'vibration') {
-  choice.value = 'vibration'
-}
+  if (route.params.choice == 'admin_authorize') {
+    choice.value = 'admin_authorize'
+  } else if (route.params.choice === 'segmentation') {
+    choice.value = 'segmentation'
+  } else if (route.params.choice === 'seg_history') {
+    choice.value = 'seg_history'
+  }
 };
 </script>
 

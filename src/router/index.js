@@ -5,7 +5,7 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect: '/login'  // 重定向
+            redirect: '/layout/index.vue'  // 重定向
         },
         {
             path: '/login',
