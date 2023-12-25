@@ -1,13 +1,12 @@
 <!-- 图像分割页面 -->
 <template>
 
-    <div>这是图像分割页面</div>
-    <el-button @click="GoToDash">进入仪表盘</el-button>
+    <!-- <el-button @click="GoToDash">进入仪表盘</el-button> -->
     <div class="container">
         <ImgUploader ref="ImgUploadRef" @uploadPicture ="upload" @onCancel="cancel"/>
     </div>
     <div class="progress-wrap" v-if="showProgress">
-        <el-progress :text-inside="false" :stroke-width="18" :percentage="per"></el-progress>
+        <el-progress :text-inside="false" :stroke-width="18" :percentage="per" striped striped-flow></el-progress>
     </div>
     <!-- <div class="result-container" v-if="ImgResult">
         <ImgList :data="ImgResult"/>
@@ -30,7 +29,7 @@ import Request from "@/utils/Request.js"
 import Message from "@/utils/Message.js"
 import ImgList from "@/components/ResultContainer.vue"
 import ImgUploader from '@/components/ImgUploader_batch.vue'
-import { UploadBatchImg, SegSingleImg, GetSegResult, GetImgByDate } from '@/api/segmentation_admin.js'
+import { UploadBatchImg, SegSingleImg, GetSegResult, GetImgByDate } from '@/api/segmentation.js'
 import { timePanelSharedProps } from 'element-plus/es/components/time-picker/src/props/shared'
 
 var ImgUploadRef = ref(null); // 上传的图片
@@ -43,7 +42,6 @@ var showProgress = ref(false); // 控制是否展示进度条
 
 // 跳转仪表盘页面
 const GoToDash = () => {
-    
     router.push({ 
         name: 'layout', 
         params:{ 
@@ -104,7 +102,7 @@ const after_upload = async (result) => {
             const labels = segmentationResponse.data['label_list'];
             console.log("Seg Done", segmentationResponse);
             var segmentationResult = await GetSegResult(formData);
-            console.log("fileList[index].url ", fileList[index].url);
+            // console.log("fileList[index].url ", fileList[index].url);
             resizeImage(fileList[index].url, 200, 200)
                 .then(resizedUrl => {
                     thumbnailUrl.value = resizedUrl;
@@ -162,6 +160,7 @@ const cancel = () => {
         flex-direction: column;
         /* justify-content: space-between; */
         height: 40vh; 
+        margin-top: 60px;
     }
 
     .progress-wrap {
@@ -188,7 +187,7 @@ const cancel = () => {
     }
 
     .carousel {
-        min-height: 100% !important;
+        min-height: 600px;
         flex: 1;
     }
 </style>

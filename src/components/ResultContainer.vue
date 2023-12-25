@@ -113,7 +113,7 @@
     margin-bottom: 20px; /* Add spacing between images */
     margin-right: 20px; /* Add a right offset */
     max-width: 16%;
-    max-height: 50%;
+    max-height: 65%;
   }
   
   .image {
