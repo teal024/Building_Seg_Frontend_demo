@@ -143,6 +143,7 @@ const after_upload = async (result) => {
 // 取消上传
 const cancel = () => {
     ImgResult.value = [];
+    showProgress = false;
 }
 
 
