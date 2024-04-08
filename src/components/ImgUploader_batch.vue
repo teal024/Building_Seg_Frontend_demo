@@ -121,6 +121,8 @@ const onCancel = () =>{
   emit('onCancel');
 };
 
+defineExpose({onCancel});
+
 </script>
 
 

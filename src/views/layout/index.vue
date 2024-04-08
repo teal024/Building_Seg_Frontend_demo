@@ -51,8 +51,9 @@ const updateLogic = () => {
     top:0%;
     width:15%;
     height:100%;
-    background-color: rgb(0, 23, 52);
-    color:white;
+    background-color: rgb(14, 16, 95);
+    /* rgb(215, 215, 215); */
+    color:rgb(54, 91, 156);
 }
 .func-zone{
     position: absolute;
