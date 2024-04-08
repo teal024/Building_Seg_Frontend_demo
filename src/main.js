@@ -6,6 +6,8 @@ import ElementPlus from 'element-plus'// 导入elementPlus
 import 'element-plus/dist/index.css'
 import store from './store'// 导入vuex文件
 import * as echarts from 'echarts';// 导入echarts文件
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const app = createApp(App)
 app.use(ElementPlus)
@@ -15,4 +17,8 @@ app.use(store)
 app.config.globalProperties.$echarts = echarts;
 app.config.devtools = true;
 app.mount('#app')
+
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
 

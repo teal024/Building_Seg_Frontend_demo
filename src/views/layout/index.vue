@@ -20,9 +20,11 @@ import admin_authorize from '@/views/layout/admin_authorize/index.vue'
 import segmentation from '@/views/layout/segmentation/index.vue'
 import seg_history from '@/views/layout/seg_history/index.vue'
 import { useRoute } from 'vue-router'
+import { useUserStore } from '@/store/user';
 
 const route = useRoute();
 const choice = ref('segmentation');//根据路由传值对应功能区的显示内容
+const userStore = useUserStore();
 
 // 监听路由变化并执行不同逻辑
 onMounted(() => {
@@ -56,10 +58,10 @@ const updateLogic = () => {
     color:rgb(54, 91, 156);
 }
 .func-zone{
-    position: absolute;
-    left:15%;
-    top:0%;
-    width:85%;
-    height:100%;
+  position: absolute;
+  left:15%;
+  top:0%;
+  width:85%;
+  height:100%;
 }
 </style>
