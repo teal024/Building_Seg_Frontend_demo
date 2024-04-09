@@ -15,6 +15,7 @@ app.use(router)
 app.use(store)
 // 将 ECharts 挂载到全局 Vue 实例的原型上
 app.config.globalProperties.$echarts = echarts;
+app.config.devtools = true;
 app.mount('#app')
 
 const pinia = createPinia()

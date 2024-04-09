@@ -7,7 +7,7 @@
           <div class="thumbnail-wrap">
             <img :src="data.thumbnail" alt="缩略图加载失败">
             <div class="label-wrap">
-              <el-checkbox-group v-model="selectedLabels" class="label-group">
+              <el-checkbox-group v-if="isGlass" v-model="selectedLabels" class="label-group">
               <el-checkbox v-for="(label, index) in data.labelList" :key="index" :label="label" border size="mini" checked="true">
                 {{ label }}
               </el-checkbox>
@@ -44,6 +44,10 @@
       type: Object,
       required: true,
     },
+    isGlass: {
+      type: Boolean,
+      required: true,
+    }
   });
   
   // const images = computed(() => props.data.pictures);
